@@ -48,7 +48,7 @@
 
 <div class="pdf-page text-center">
   <div style="margin-top: 50px;">
-    <img src="{{ public_path('storage/images/logo.webp') }}" style="width: 80px;">
+    <img src="{{ public_path('storage/images/logo-rembang.png') }}" style="width: 80px;">
     
     <p style="margin-top: 15px; font-size: 11pt; color: #64748b; letter-spacing: 2px;">PEMERINTAH KABUPATEN REMBANG</p>
     <h1 style="margin: 5px 0; font-size: 18pt; text-transform: uppercase;">Inspektorat Daerah</h1>
