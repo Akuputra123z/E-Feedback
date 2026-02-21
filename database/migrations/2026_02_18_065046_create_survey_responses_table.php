@@ -12,22 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('survey_responses', function (Blueprint $table) {
-            $table->id();
+           $table->id();
 
             // Identitas Responden
-            $table->string('email')->index();
+            // Hapus unique, tambahkan nullable jika email tidak wajib
+            $table->string('email')->index(); 
             $table->string('opd');
+            
+            // Sesuaikan dengan data irban (irban1, irban2, dst)
             $table->string('irban')->index(); 
             $table->string('jenis_layanan');
             $table->date('tanggal')->index();
 
             // Skor
-            $table->unsignedInteger('total_score')->default(0); // skor mentah
-            $table->decimal('ikm_score', 5, 2)->default(0); // hasil 0–100
+            $table->unsignedInteger('total_score')->default(0);
+            $table->decimal('ikm_score', 5, 2)->default(0); 
             $table->string('category')->nullable()->index();
 
-            // Mencegah duplikasi pengisian di hari yang sama (opsional)
-            $table->unique(['email', 'tanggal']);
+            // Gunakan Index biasa saja untuk performa pencarian, bukan Unique
+            $table->index(['email', 'tanggal']);
 
             $table->softDeletes();
             $table->timestamps();

@@ -58,40 +58,45 @@ class SurveyResponse extends Model
     /**
      * 🔥 Hitung IKM berdasarkan bobot dimensi secara otomatis
      */
-    public function calculateIkms(): void
-    {
-        // Gunakan withAggregate atau Eager Loading untuk performa
-        $this->loadMissing('answers.question');
+   public function calculateIkms(): void
+{
+    // Eager loading hanya kolom yang diperlukan saja (id, dimension)
+    $this->loadMissing(['answers' => function($query) {
+        $query->with('question:id,dimension');
+    }]);
 
-        $answers = $this->getValidAnswers();
+    $answers = $this->getValidAnswers();
 
-        if ($answers->isEmpty()) {
-            $this->updateQuietly([
-                'total_score' => 0,
-                'ikm_score'   => 0,
-                'category'    => $this->resolveCategory(0),
-            ]);
-            return;
-        }
-
-        $weights = $this->dimensionWeights();
-        $grouped = $answers->groupBy(fn ($a) => $a->question->dimension);
-        
-        $weightedScore = 0;
-
-        foreach ($weights as $dimension => $weight) {
-            if (isset($grouped[$dimension])) {
-                $avg = $grouped[$dimension]->avg('answer'); 
-                $weightedScore += ($avg * 20) * $weight; // Normalisasi ke 100
-            }
-        }
-
+    if ($answers->isEmpty()) {
         $this->updateQuietly([
-            'total_score' => $answers->sum('answer'),
-            'ikm_score'   => round($weightedScore, 2),
-            'category'    => $this->resolveCategory($weightedScore),
+            'total_score' => 0, 'ikm_score' => 0, 'category' => $this->resolveCategory(0)
         ]);
+        return;
     }
+
+    $weights = $this->dimensionWeights();
+    $grouped = $answers->groupBy(fn ($a) => $a->question->dimension);
+    
+    $weightedScore = 0;
+    $totalWeightUsed = 0; // Tambahan untuk menangani dimensi kosong
+
+    foreach ($weights as $dimension => $weight) {
+        if ($grouped->has($dimension)) {
+            $avg = $grouped->get($dimension)->avg('answer'); 
+            $weightedScore += ($avg * 20) * $weight;
+            $totalWeightUsed += $weight;
+        }
+    }
+
+    // Jika ada dimensi yang tidak ada soalnya, normalisasi skornya
+    $finalIkm = $totalWeightUsed > 0 ? ($weightedScore / $totalWeightUsed) : 0;
+
+    $this->updateQuietly([
+        'total_score' => $answers->sum('answer'),
+        'ikm_score'   => round($finalIkm, 2),
+        'category'    => $this->resolveCategory($finalIkm),
+    ]);
+}
 
     protected function getValidAnswers(): Collection
     {

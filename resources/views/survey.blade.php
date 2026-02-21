@@ -73,18 +73,21 @@
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         </div>
                         <h3 class="text-2xl font-black text-slate-900">Identitas Responden</h3>
-                        <p class="text-sm text-slate-500 mt-1">Gunakan alamat email resmi untuk validasi.</p>
+                        <p class="text-sm text-slate-500 mt-1" >Gunakan alamat email resmi untuk validasi.</p>
+
                     </div>
 
                     <div class="space-y-8">
                         <div>
                             <label class="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3">Alamat Email Resmi</label>
                             <input type="email" name="email" value="{{ old('email') }}" required 
+                                   placeholder="nama@gmail.com"
                                    class="w-full rounded-2xl px-6 py-5 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-600 transition-all outline-none font-medium">
                         </div>
                         <div>
                             <label class="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3">Nama Instansi / OPD</label>
-                            <input type="text" name="opd" value="{{ old('opd') }}" required 
+                            <input type="text" name="opd" value="{{ old('opd') }}" required
+                                   placeholder="Masukan Nama Lengkap OPD Anda"
                                    class="w-full rounded-2xl px-6 py-5 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-600 transition-all outline-none font-medium">
                         </div>
                     </div>

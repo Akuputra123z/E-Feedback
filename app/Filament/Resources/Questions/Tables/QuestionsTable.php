@@ -6,7 +6,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
-
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 
@@ -52,7 +53,22 @@ class QuestionsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('dimension')
+                    ->label('Filter Dimensi')
+                    ->options([
+                        'Materi' => 'Materi Konsultasi',
+                        'Standar' => 'Standar Pelayanan',
+                        'SDM' => 'Profesionalisme SDM',
+                        'Dukungan' => 'Dukungan & Pengelolaan',
+                    ])
+                    ->native(false),
+
+                // 2. Filter Status (Aktif/Non-Aktif) menggunakan Ternary
+                TernaryFilter::make('is_active')
+                    ->label('Status Aktif')
+                    ->placeholder('Semua Status')
+                    ->trueLabel('Hanya Aktif')
+                    ->falseLabel('Hanya Non-Aktif'),
             ])
             ->recordActions([
                 EditAction::make(),
