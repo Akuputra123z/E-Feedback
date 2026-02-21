@@ -2,9 +2,9 @@
 
 namespace App\Filament\Widgets;
 
-
 use App\Models\SurveyResponse;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Auth;
 
 class SatisfactionChart extends ChartWidget
 {
@@ -16,25 +16,39 @@ class SatisfactionChart extends ChartWidget
 
     protected function getData(): array
     {
-        $avgScore = SurveyResponse::avg('ikm_score') ?? 0;
-        $isScale100 = $avgScore > 5;
+        $user = Auth::user();
 
-        $tPuas = $isScale100 ? 80 : 4;
-        $tCukup = $isScale100 ? 60 : 3;
+        // 1. Inisialisasi query dan bersihkan scope agar tidak bentrok
+        $baseQuery = SurveyResponse::query()->withoutGlobalScopes();
 
-        $puas = SurveyResponse::where('ikm_score', '>=', $tPuas)->count();
-        $cukup = SurveyResponse::where('ikm_score', '>=', $tCukup)->where('ikm_score', '<', $tPuas)->count();
-        $kurang = SurveyResponse::where('ikm_score', '<', $tCukup)->count();
+        // 2. Filter berdasarkan irban_type milik user (Sesuai model User Anda)
+        if ($user && $user->role !== 'super_admin') {
+            $baseQuery->where('irban', $user->irban_type);
+        }
+
+        /** * 3. Ambil Data (Menggunakan standar IKM skala 100)
+         * Sangat Baik/Puas: >= 88.31
+         * Baik/Cukup: 76.61 - 88.30
+         * Kurang: < 76.61
+         */
+        $puas = (clone $baseQuery)->where('ikm_score', '>=', 88.31)->count();
+        $cukup = (clone $baseQuery)->where('ikm_score', '>=', 76.61)
+                                   ->where('ikm_score', '<', 88.31)->count();
+        $kurang = (clone $baseQuery)->where('ikm_score', '<', 76.61)->count();
 
         return [
             'datasets' => [
                 [
                     'label' => 'Responden',
                     'data' => [$puas, $cukup, $kurang],
-                    'backgroundColor' => ['#195de6', '#60a5fa', '#e2e8f0'],
+                    'backgroundColor' => [
+                        '#10b981', // Hijau (Puas)
+                        '#3b82f6', // Biru (Cukup)
+                        '#ef4444'  // Merah (Kurang)
+                    ],
                 ],
             ],
-            'labels' => ['Puas', 'Cukup', 'Kurang'],
+            'labels' => ['Sangat Baik', 'Baik', 'Kurang/Tidak Baik'],
         ];
     }
 

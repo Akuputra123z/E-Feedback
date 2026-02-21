@@ -23,33 +23,33 @@ class ListSurveyReports extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            // Tombol Download PDF
-           Action::make('download_pdf')
-                ->label('Download PDF')
-                ->color('danger')
-                ->icon(Heroicon::OutlinedDocumentArrowDown)
-               ->action(function () {
-        // 1. Ambil data dengan eager loading jika perlu untuk performa
-        $records = $this->getFilteredTableQuery()->get();
+          Action::make('download_pdf')
+            ->label('Download PDF')
+            ->color('danger')
+            ->icon('heroicon-o-document-arrow-down')
+            ->action(function () {
+                $records = $this->getFilteredTableQuery()->get();
 
-        // 2. Generate PDF
-        $pdf = Pdf::loadView('survey_reports.pdf', [
-            'records' => $records,
-            // Opsional: Kirimkan base64 logo langsung dari sini jika view kesulitan memproses path
-            'logo_base64' => base64_encode(file_get_contents(storage_path('app/public/images/logo-rembang.png')))
-        ])
-        ->setPaper('a4', 'portrait')
-        ->setOptions([
-            'tempDir' => public_path('temp'), // Folder sementara untuk memproses gambar
-            'isRemoteEnabled' => true,        // Wajib untuk logo & font eksternal
-            'isHtml5ParserEnabled' => true,
-            'chroot' => [storage_path('app/public'), public_path()], // Beri izin akses ke folder logo
-        ]);
+                // 1. Ambil path logo (Pastikan file ada di storage/app/public/images/logo.webp)
+                // Jika file ada di public/storage/images/logo.webp, gunakan public_path
+                $logoPath = public_path('storage/images/logo-rembang.png');
+                $logoBase64 = '';
 
-        return response()->streamDownload(
-            fn () => print($pdf->output()),
-            'Laporan-Survei-' . now()->format('d-m-Y') . '.pdf'
-        );
+                if (file_exists($logoPath)) {
+                    $type = pathinfo($logoPath, PATHINFO_EXTENSION);
+                    $data = file_get_contents($logoPath);
+                    $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                }
+
+                $pdf = Pdf::loadView('survey_reports.pdf', [
+                    'records' => $records,
+                    'logo_base64' => $logoBase64, // Kirim variabel base64
+                ])->setPaper('a4', 'portrait');
+
+                return response()->streamDownload(
+                    fn () => print($pdf->output()),
+                    'Laporan-Survei.pdf'
+                );
             }),
 
 
@@ -58,7 +58,7 @@ class ListSurveyReports extends ListRecords
             ->label('Download Excel')
             ->color('success')
             ->icon(Heroicon::OutlinedDocumentArrowDown)
-              ->action(function () {
+            ->action(function () {
                 $records = $this->getFilteredTableQuery()->with('answers.question')->get();
                 return Excel::download(new SurveyReportsExport($records), 'survey_reports.xlsx');
             }),

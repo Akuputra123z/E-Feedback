@@ -26,10 +26,10 @@ class QuestionForm
                         Select::make('dimension')
                             ->label('Dimensi / Kategori')
                             ->options([
-                                'Materi' => 'Materi Konsultasi (30%)',
-                                'Standar' => 'Standar Pelayanan (25%)',
-                                'SDM' => 'Profesionalisme SDM (30%)',
-                                'Dukungan' => 'Dukungan & Pengelolaan (15%)',
+                                'Materi' => 'Materi Konsultasi',
+                                'Standar' => 'Standar Pelayanan',
+                                'SDM' => 'Profesionalisme SDM',
+                                'Dukungan' => 'Dukungan & Pengelolaan',
                             ])
                             ->required()
                             ->searchable()

@@ -34,20 +34,18 @@ class SurveyResponse extends Model
      * 🔒 Global Scope: Keamanan Data Otomatis
      * Irban hanya bisa melihat data miliknya, Admin bisa melihat semua.
      */
-    protected static function booted(): void
-    {
-        static::addGlobalScope('irban_scope', function (Builder $builder) {
-            // Cek jika sedang diakses via Filament/Auth dan bukan Admin
-            if (Auth::check()) {
-                $user = Auth::user();
-                
-                // Pastikan admin bisa melihat semua tanpa filter
-                if ($user->role !== 'admin' && isset($user->irban)) {
-                    $builder->where('irban', $user->irban);
-                }
+   protected static function booted(): void
+{
+    static::addGlobalScope('irban_scope', function (Builder $builder) {
+        // Hanya jalankan filter jika diakses melalui Request Web/Filament (bukan Console/Terminal)
+        if (!app()->runningInConsole() && Auth::check()) {
+            $user = Auth::user();
+            if ($user->role !== 'admin' && !empty($user->irban)) {
+                $builder->where('irban', $user->irban);
             }
-        });
-    }
+        }
+    });
+}
 
     /**
      * Relasi ke jawaban survey
