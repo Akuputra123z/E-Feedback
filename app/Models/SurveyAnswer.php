@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
+// Pastikan semua model di-import jika berbeda namespace
+use App\Models\SurveyResponse; 
+use App\Models\Question;
 
 class SurveyAnswer extends Model
 {
@@ -17,47 +21,24 @@ class SurveyAnswer extends Model
         'answer' => 'integer',
     ];
 
-    /**
-     * Event model untuk auto recalculation IKM
-     */
-    protected static function booted(): void
+   
+
+    public function recalculateSurvey(): void
     {
-        static::saved(function (SurveyAnswer $answer) {
-            $answer->recalculateSurvey();
-        });
+        // Gunakan withoutGlobalScopes agar kalkulasi tetap jalan 
+        // meskipun dipicu oleh user yang berbeda Irban (misal: Admin)
+        $survey = SurveyResponse::withoutGlobalScopes()->find($this->survey_response_id);
 
-        static::deleted(function (SurveyAnswer $answer) {
-            $answer->recalculateSurvey();
-        });
-    }
-
-    /**
-     * Hitung ulang IKM pada header survey terkait
-     */
-    protected function recalculateSurvey(): void
-    {
-        if (!$this->survey_response_id) {
-            return;
-        }
-
-        $survey = $this->surveyResponse()->first();
-
-        if ($survey) {
+        if ($survey && method_exists($survey, 'calculateIkms')) {
             $survey->calculateIkms();
         }
     }
 
-    /**
-     * Relasi ke header survey
-     */
     public function surveyResponse(): BelongsTo
     {
-        return $this->belongsTo(SurveyResponse::class);
+        return $this->belongsTo(SurveyResponse::class, 'survey_response_id');
     }
 
-    /**
-     * Relasi ke master pertanyaan
-     */
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);

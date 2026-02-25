@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Question;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,8 @@ class SurveyResponse extends Model
         'irban',
         'jenis_layanan',
         'tanggal',
+        'lokasi_survey',
+        'suggestions',
         'total_score',
         'ikm_score',
         'category',
@@ -30,82 +33,109 @@ class SurveyResponse extends Model
         'ikm_score'   => 'decimal:2',
     ];
 
-    /**
-     * 🔒 Global Scope: Keamanan Data Otomatis
-     * Irban hanya bisa melihat data miliknya, Admin bisa melihat semua.
-     */
-   protected static function booted(): void
-{
-    static::addGlobalScope('irban_scope', function (Builder $builder) {
-        // Hanya jalankan filter jika diakses melalui Request Web/Filament (bukan Console/Terminal)
-        if (!app()->runningInConsole() && Auth::check()) {
+    /* ======================================================
+     | GLOBAL SCOPE (DATA SECURITY)
+     ====================================================== */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('irban_scope', function (Builder $builder) {
+
+            if (app()->runningInConsole() || !Auth::check()) {
+                return;
+            }
+
             $user = Auth::user();
-            if ($user->role !== 'admin' && !empty($user->irban)) {
+
+            if ($user->role !== 'admin') {
                 $builder->where('irban', $user->irban);
             }
-        }
-    });
-}
+        });
+    }
 
-    /**
-     * Relasi ke jawaban survey
-     */
+    /* ======================================================
+     | RELATIONS
+     ====================================================== */
     public function answers(): HasMany
     {
         return $this->hasMany(SurveyAnswer::class);
     }
 
-    /**
-     * 🔥 Hitung IKM berdasarkan bobot dimensi secara otomatis
-     */
-   public function calculateIkms(): void
-{
-    // Eager loading hanya kolom yang diperlukan saja (id, dimension)
-    $this->loadMissing(['answers' => function($query) {
-        $query->with('question:id,dimension');
-    }]);
+    /* ======================================================
+     | EXTERNAL SURVEY AUTO RULE
+     ====================================================== */
+    public function applyExternalSurveyRule(): void
+    {
+        if ($this->lokasi_survey !== 'Luar Inspektorat') {
+            return;
+        }
 
-    $answers = $this->getValidAnswers();
+        $excludedDimension = 'Dukungan';
 
-    if ($answers->isEmpty()) {
-        $this->updateQuietly([
-            'total_score' => 0, 'ikm_score' => 0, 'category' => $this->resolveCategory(0)
-        ]);
-        return;
+        $questionIds = Question::active()
+            ->where('dimension', $excludedDimension)
+            ->pluck('id');
+
+        foreach ($questionIds as $questionId) {
+            $this->answers()->updateOrCreate(
+                ['question_id' => $questionId],
+                ['answer' => 5]
+            );
+        }
+
+        $this->calculateIkms();
     }
 
-    $weights = $this->dimensionWeights();
-    $grouped = $answers->groupBy(fn ($a) => $a->question->dimension);
-    
-    $weightedScore = 0;
-    $totalWeightUsed = 0; // Tambahan untuk menangani dimensi kosong
+    /* ======================================================
+     | IKM CALCULATION
+     ====================================================== */
+    public function calculateIkms(): void
+    {
+        $answers = $this->answers()
+            ->with('question:id,dimension')
+            ->get()
+            ->filter(fn ($a) => $a->question?->dimension !== null);
 
-    foreach ($weights as $dimension => $weight) {
-        if ($grouped->has($dimension)) {
-            $avg = $grouped->get($dimension)->avg('answer'); 
-            $weightedScore += ($avg * 20) * $weight;
+        if ($answers->isEmpty()) {
+            $this->updateQuietly([
+                'total_score' => 0,
+                'ikm_score'   => 0,
+                'category'    => $this->resolveCategory(0),
+            ]);
+            return;
+        }
+
+        $weights = $this->dimensionWeights();
+        $grouped = $answers->groupBy(fn ($a) => $a->question->dimension);
+
+        $weightedScore   = 0;
+        $totalWeightUsed = 0;
+
+        foreach ($weights as $dimension => $weight) {
+
+            if (!$grouped->has($dimension)) {
+                continue;
+            }
+
+            $avg = $grouped[$dimension]->avg('answer');
+
+            $weightedScore   += ($avg * 20) * $weight;
             $totalWeightUsed += $weight;
         }
+
+        $finalIkm = $totalWeightUsed > 0
+            ? $weightedScore / $totalWeightUsed
+            : 0;
+
+        $this->updateQuietly([
+            'total_score' => $answers->sum('answer'),
+            'ikm_score'   => round($finalIkm, 2),
+            'category'    => $this->resolveCategory($finalIkm),
+        ]);
     }
 
-    // Jika ada dimensi yang tidak ada soalnya, normalisasi skornya
-    $finalIkm = $totalWeightUsed > 0 ? ($weightedScore / $totalWeightUsed) : 0;
-
-    $this->updateQuietly([
-        'total_score' => $answers->sum('answer'),
-        'ikm_score'   => round($finalIkm, 2),
-        'category'    => $this->resolveCategory($finalIkm),
-    ]);
-}
-
-    protected function getValidAnswers(): Collection
-    {
-        return $this->answers->filter(fn ($a) => optional($a->question)->dimension !== null);
-    }
-
-    /**
-     * Konfigurasi Bobot IKM
-     */
+    /* ======================================================
+     | CONFIGURATION
+     ====================================================== */
     protected function dimensionWeights(): array
     {
         return [

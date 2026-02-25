@@ -10,6 +10,7 @@ use App\Filament\Resources\SurveyAnswers\Schemas\SurveyAnswerForm;
 use App\Filament\Resources\SurveyAnswers\Schemas\SurveyAnswerInfolist;
 use App\Filament\Resources\SurveyAnswers\Tables\SurveyAnswersTable;
 use App\Models\SurveyAnswer;
+use Illuminate\Database\Eloquent\Builder;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -24,6 +25,10 @@ class SurveyAnswerResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'SureveyAnswer';
 
+   public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery();
+}
     public static function form(Schema $schema): Schema
     {
         return SurveyAnswerForm::configure($schema);

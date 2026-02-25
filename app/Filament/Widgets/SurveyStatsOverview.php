@@ -17,27 +17,54 @@ class SurveyStatsOverview extends BaseWidget
     {
         $user = Auth::user();
 
-        // 1. Bersihkan query dari scope agar tidak bentrok
-        $query = SurveyResponse::query()->withoutGlobalScopes();
+        if (!$user) {
+            return [];
+        }
+
+        // Query dasar
+        $query = SurveyResponse::query();
 
         /**
-         * 2. Filter berdasarkan irban_type dari model User
-         * Kita asumsikan di tabel survey_responses nama kolomnya adalah 'irban'
+         * ==========================================
+         * ROLE BASED FILTER (SPATIE)
+         * ==========================================
          */
-        if ($user && $user->role !== 'super_admin') {
-            // Gunakan irban_type milik user untuk memfilter kolom irban di tabel survey
+
+        // Jika user adalah IRBAN → hanya lihat data sesuai irban_type
+        if ($user->hasRole('irban') && !empty($user->irban_type)) {
             $query->where('irban', $user->irban_type);
         }
 
-        // 3. Ambil Data
+        // Jika admin / super_admin → lihat semua data
+        // (tidak perlu filter apa pun)
+
+        /**
+         * ==========================================
+         * AMBIL DATA
+         * ==========================================
+         */
         $totalResponden = (clone $query)->count();
         $avgIkm = (clone $query)->avg('ikm_score') ?? 0;
 
         $quality = $this->getServiceQuality($avgIkm);
 
+        /**
+         * ==========================================
+         * DESKRIPSI DINAMIS
+         * ==========================================
+         */
+        $descriptionText = match (true) {
+            $user->hasRole('super_admin'),
+            $user->hasRole('admin') => 'Data Seluruh Irban',
+
+            $user->hasRole('irban') => 'Data ' . strtoupper($user->irban_type),
+
+            default => 'Data Survey',
+        };
+
         return [
             Stat::make('Total Responden', number_format($totalResponden) . ' Orang')
-                ->description('Data masuk untuk ' . ($user->role === 'super_admin' ? 'Seluruh Irban' : strtoupper($user->irban_type)))
+                ->description($descriptionText)
                 ->descriptionIcon('heroicon-m-user-group')
                 ->icon('heroicon-m-users')
                 ->color('info'),
@@ -59,10 +86,26 @@ class SurveyStatsOverview extends BaseWidget
     protected function getServiceQuality(float $ikm): array
     {
         return match (true) {
-            $ikm >= 88.31 => ['label' => 'A (Sangat Baik)', 'desc' => 'Pelayanan Prima', 'color' => 'success'],
-            $ikm >= 76.61 => ['label' => 'B (Baik)', 'desc' => 'Kinerja Baik', 'color' => 'primary'],
-            $ikm >= 65.01 => ['label' => 'C (Kurang Baik)', 'desc' => 'Perlu Perbaikan', 'color' => 'warning'],
-            default       => ['label' => 'D (Tidak Baik)', 'desc' => 'Kinerja Rendah', 'color' => 'danger'],
+            $ikm >= 88.31 => [
+                'label' => 'A (Sangat Baik)',
+                'desc'  => 'Pelayanan Prima',
+                'color' => 'success'
+            ],
+            $ikm >= 76.61 => [
+                'label' => 'B (Baik)',
+                'desc'  => 'Kinerja Baik',
+                'color' => 'primary'
+            ],
+            $ikm >= 65.01 => [
+                'label' => 'C (Kurang Baik)',
+                'desc'  => 'Perlu Perbaikan',
+                'color' => 'warning'
+            ],
+            default => [
+                'label' => 'D (Tidak Baik)',
+                'desc'  => 'Kinerja Rendah',
+                'color' => 'danger'
+            ],
         };
     }
 }

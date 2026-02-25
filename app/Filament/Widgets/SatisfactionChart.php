@@ -22,7 +22,7 @@ class SatisfactionChart extends ChartWidget
         $baseQuery = SurveyResponse::query()->withoutGlobalScopes();
 
         // 2. Filter berdasarkan irban_type milik user (Sesuai model User Anda)
-        if ($user && $user->role !== 'super_admin') {
+        if ($user && $user->role !== 'admin') {
             $baseQuery->where('irban', $user->irban_type);
         }
 

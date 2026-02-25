@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
             <div class="lg:col-span-5 space-y-6">
                 <div class="flex items-center">
-                    <img src="{{ asset('storage/images/logo-rembang.png') }}" 
+                    <img src="{{ asset('storage/images/logo1.png') }}" 
                          alt="Logo Rembang" 
                          class="w-64 md:w-80 h-auto object-contain"> 
                     </div>
@@ -17,6 +17,8 @@
                 <ul class="space-y-3 text-sm">
                     <li><a href="/" class="hover:text-blue-600 transition-colors">Beranda</a></li>
                     <li><a href="/survey" class="hover:text-blue-600 transition-colors">E-Survei Kepuasan</a></li>
+                    <li><a href="https://simantab.rembangkab.go.id/" class="hover:text-blue-600 transition-colors">SIMANTAP</a></li>
+                    <li><a href="https://drive-tlaudit.rembangkab.go.id/login" class="hover:text-blue-600 transition-colors">TLAUDIT</a></li>
                     <li><a href="/admin" class="hover:text-blue-600 transition-colors">Portal Admin</a></li>
                 </ul>
             </div>

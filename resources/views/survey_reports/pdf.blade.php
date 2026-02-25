@@ -2,106 +2,231 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
+
     <style>
-        /* Pengaturan Kertas */
-        @page { 
-            size: a4 portrait; 
-            margin: 1.5cm; 
-        }
-        
-        body { 
-            margin: 0; padding: 0; 
-            font-family: 'Helvetica', sans-serif; 
-            font-size: 10pt; color: #334155;
-            line-height: 1.4;
+        /* ==========================
+           PAGE SETUP
+        ========================== */
+        @page {
+            size: A4 portrait;
+            margin: 1.5cm;
         }
 
-        /* Logic Pemisah Halaman */
-        .page-wrapper { width: 100%; }
-        .page-break { page-break-after: always; }
-
-        /* Cover Styles */
-        .cover-content {
-            text-align: center;
-            padding-top: 50px;
+        body {
+            margin: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10pt;
+            color: #334155;
+            line-height: 1.5;
         }
 
-        /* Utility */
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* ==========================
+           UTILITIES
+        ========================== */
         .text-center { text-align: center; }
-        .font-bold { font-weight: bold; }
-        
-        /* Kartu Ringkasan */
-        .summary-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .summary-table td { padding: 5px; }
-        .card { border: 1px solid #e2e8f0; padding: 15px 5px; border-radius: 10px; text-align: center; }
-        .card-blue { background-color: #195de6; color: white; border: none; }
+        .text-bold { font-weight: bold; }
+        .text-muted { color: #64748b; }
 
-        /* Box Analisis */
-        .analysis-box { 
-            border: 1px solid #e2e8f0; 
-            border-radius: 12px; 
-            padding: 15px; 
-            margin-bottom: 30px;
-            background-color: #f8fafc;
+        /* ==========================
+           COVER
+        ========================== */
+        .cover {
+            text-align: center;
+            padding-top: 60px;
         }
 
-        /* Tabel Data Detail */
-        .data-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .data-table th { background-color: #f1f5f9; border: 1px solid #e2e8f0; padding: 10px; font-size: 8pt; color: #64748b; text-transform: uppercase; }
-        .data-table td { border: 1px solid #e2e8f0; padding: 8px; font-size: 9pt; word-wrap: break-word; vertical-align: top; }
+        .cover-divider {
+            height: 4px;
+            width: 60px;
+            background: #195de6;
+            margin: 25px auto;
+        }
 
-        .footer-sign { 
-            margin-top: 40px; 
-            float: right; 
-            width: 250px; 
-            text-align: center; 
+        /* ==========================
+           CARD SUMMARY
+        ========================== */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .summary-table td {
+            padding: 6px;
+        }
+
+        .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-primary {
+            background: #195de6;
+            color: #fff;
+            border: none;
+        }
+
+        .card-label {
+            font-size: 8pt;
+            margin-bottom: 5px;
+        }
+
+        .card-value {
+            font-size: 18pt;
+            font-weight: bold;
+        }
+
+        /* ==========================
+           ANALYSIS
+        ========================== */
+        .analysis {
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* ==========================
+           TABLE DATA
+        ========================== */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .table th {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            font-size: 8pt;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .table td {
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            font-size: 9pt;
+            vertical-align: top;
+            word-break: break-word;
+        }
+
+        /* ==========================
+           SIGNATURE
+        ========================== */
+        .signature {
+            width: 320px;
+            margin-left: 55%;
+            margin-top: 60px;
+            text-align: center;
             page-break-inside: avoid;
+        }
+
+        .signature-space {
+            margin-bottom: 55px;
+        }
+
+        .signature-name {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            padding-bottom: 2px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .signature-nip {
+            margin-top: 2px;
+            font-size: 9pt;
+        }
+
+        /* ==========================
+           SECTION TITLE
+        ========================== */
+        .section-title {
+            border-left: 4px solid #195de6;
+            padding-left: 10px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
+
 <body>
 
-    <div class="page-wrapper page-break">
-        <div class="cover-content">
-            <img src="{{ public_path('storage/images/logo.webp') }}" style="width: 80px;">
-            <p style="margin-top: 15px; font-size: 11pt; color: #64748b; letter-spacing: 2px;">PEMERINTAH KABUPATEN REMBANG</p>
-            <h1 style="margin: 5px 0; font-size: 18pt; text-transform: uppercase;">Inspektorat Daerah</h1>
+    <!-- ==========================
+         COVER PAGE
+    ========================== -->
+    <div class="cover page-break">
+        <img src="{{ public_path('storage/images/logo.webp') }}" width="80">
 
-            <div style="margin: 150px 0;">
-                <div style="height: 4px; width: 60px; background: #195de6; margin: 0 auto 25px;"></div>
-                <h2 style="font-size: 26pt; margin: 0; line-height: 1.2;">LAPORAN HASIL SURVEI<br>KEPUASAN MASYARAKAT</h2>
-                <p style="font-size: 16pt; color: #195de6; font-weight: bold; margin-top: 15px;">(e-Feedback)</p>
-                <h3 style="margin-top: 35px; font-weight: normal; color: #64748b;">Tahun {{ date('Y') }}</h3>
-            </div>
+        <p class="text-muted" style="margin-top:15px; letter-spacing:2px;">
+            PEMERINTAH KABUPATEN REMBANG
+        </p>
+
+        <h1 style="margin:5px 0; text-transform:uppercase;">
+            Inspektorat Daerah
+        </h1>
+
+        <div style="margin:150px 0;">
+            <div class="cover-divider"></div>
+
+            <h2 style="font-size:26pt; margin:0;">
+                LAPORAN HASIL SURVEI<br>
+                KEPUASAN MASYARAKAT
+            </h2>
+
+            <p style="font-size:16pt; color:#195de6; font-weight:bold; margin-top:15px;">
+                (e-Feedback)
+            </p>
+
+            <p class="text-muted" style="margin-top:35px;">
+                Tahun {{ date('Y') }}
+            </p>
         </div>
     </div>
 
-    <div class="page-wrapper">
-        <h3 style="margin-bottom: 15px; border-left: 4px solid #195de6; padding-left: 10px;">Ringkasan Eksekutif</h3>
-        
+    <!-- ==========================
+         CONTENT PAGE
+    ========================== -->
+    <div>
+
+        <h3 class="section-title">Ringkasan Eksekutif</h3>
+
         <table class="summary-table">
             <tr>
                 <td width="33%">
                     <div class="card">
-                        <div style="font-size: 7pt; color: #195de6; font-weight: bold;">TOTAL RESPONDEN</div>
-                        <div style="font-size: 18pt; font-weight: bold;">{{ $records->count() }}</div>
+                        <div class="card-label text-bold">TOTAL RESPONDEN</div>
+                        <div class="card-value">{{ $records->count() }}</div>
                     </div>
                 </td>
+
                 <td width="34%">
-                    <div class="card card-blue">
-                        <div style="font-size: 7pt; font-weight: bold;">RATA-RATA SKOR</div>
-                        <div style="font-size: 18pt; font-weight: bold;">{{ number_format($records->avg('ikm_score'), 2) }}</div>
+                    <div class="card card-primary">
+                        <div class="card-label text-bold">RATA-RATA SKOR</div>
+                        <div class="card-value">
+                            {{ number_format($records->avg('ikm_score'), 2) }}
+                        </div>
                     </div>
                 </td>
+
                 <td width="33%">
+                    @php
+                        $average = $records->avg('ikm_score') ?? 0;
+                        $divider = ($average > 5) ? 100 : 5;
+                        $indeks = ($average / $divider) * 100;
+                    @endphp
+
                     <div class="card">
-                        <div style="font-size: 7pt; color: #195de6; font-weight: bold;">INDEKS PELAYANAN</div>
-                        <div style="font-size: 18pt; font-weight: bold;">
-                            @php
-                                $average = $records->avg('ikm_score') ?? 0;
-                                $divider = ($average > 5) ? 100 : 5;
-                                $indeks = ($average / $divider) * 100;
-                            @endphp
+                        <div class="card-label text-bold">INDEKS PELAYANAN</div>
+                        <div class="card-value">
                             {{ number_format($indeks, 1) }}%
                         </div>
                     </div>
@@ -109,21 +234,26 @@
             </tr>
         </table>
 
-        <div class="analysis-box">
-            <p class="font-bold" style="font-size: 9pt; margin: 0 0 5px 0;">Analisis Strategis</p>
-            <p style="font-size: 9pt; color: #475569; text-align: justify; margin: 0;">
-                Berdasarkan data survei digital (e-Feedback) yang dikumpulkan, kualitas pelayanan pada Inspektorat Kabupaten Rembang menunjukkan tingkat kepuasan yang stabil dengan capaian indeks {{ number_format($indeks, 1) }}%.
+        <div class="analysis">
+            <p class="text-bold" style="margin:0 0 5px 0;">
+                Analisis Strategis
+            </p>
+            <p style="margin:0; text-align:justify;">
+                Berdasarkan data survei digital (e-Feedback), kualitas pelayanan
+                Inspektorat Kabupaten Rembang menunjukkan tingkat kepuasan
+                dengan capaian indeks {{ number_format($indeks, 1) }}%.
             </p>
         </div>
 
-        <h3 style="margin-bottom: 10px; border-left: 4px solid #195de6; padding-left: 10px;">Detail Data Survei</h3>
-        <table class="data-table">
+        <h3 class="section-title">Detail Data Survei</h3>
+
+        <table class="table">
             <thead>
                 <tr>
-                    <th width="8%">NO</th>
-                    <th width="42%">OPD / EMAIL</th>
-                    <th width="35%">JENIS LAYANAN</th>
-                    <th width="15%">SKOR</th>
+                    <th width="8%">No</th>
+                    <th width="42%">OPD / Email</th>
+                    <th width="35%">Jenis Layanan</th>
+                    <th width="15%">Skor</th>
                 </tr>
             </thead>
             <tbody>
@@ -131,21 +261,38 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td>
-                        <div class="font-bold">{{ $record->opd }}</div>
-                        <div style="font-size: 7pt; color: #64748b;">{{ $record->email }}</div>
+                        <div class="text-bold">{{ $record->opd }}</div>
+                        <div class="text-muted" style="font-size:8pt;">
+                            {{ $record->email }}
+                        </div>
                     </td>
                     <td>{{ $record->jenis_layanan }}</td>
-                    <td class="text-center font-bold">{{ number_format($record->ikm_score, 1) }}</td>
+                    <td class="text-center text-bold">
+                        {{ number_format($record->ikm_score, 1) }}
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div class="footer-sign">
-            <p style="margin-bottom: 50px; font-size: 9pt;">Rembang, {{ date('d F Y') }}<br>Inspektur Kabupaten Rembang,</p>
-            <p class="font-bold" style="border-bottom: 1px solid #000; display: inline-block; padding: 0 5px;">NAMA PEJABAT PENGAMPU</p>
-            <p style="margin-top: 5px; font-size: 9pt;">NIP. 19780512 200501 1 002</p>
+        <!-- ==========================
+             SIGNATURE
+        ========================== -->
+        <div class="signature">
+            <p class="signature-space">
+                Rembang, {{ date('d F Y') }}<br>
+                Inspektur Kabupaten Rembang,
+            </p>
+
+            <p class="signature-name">
+                {{ strtoupper('Imung Tri Wijayanti, S.P., M.T., M.A., CGCAE.') }}
+            </p>
+
+            <p class="signature-nip">
+                NIP. 197411281999032003
+            </p>
         </div>
+
     </div>
 
 </body>

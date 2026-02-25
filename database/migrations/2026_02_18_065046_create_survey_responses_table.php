@@ -11,27 +11,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('survey_responses', function (Blueprint $table) {
-           $table->id();
+       Schema::create('survey_responses', function (Blueprint $table) {
+            $table->id();
 
-            // Identitas Responden
-            // Hapus unique, tambahkan nullable jika email tidak wajib
+            // --- Identitas Responden & Lokasi ---
             $table->string('email')->index(); 
             $table->string('opd');
-            
-            // Sesuaikan dengan data irban (irban1, irban2, dst)
+            $table->string('lokasi_survey')
+                ->index()
+                ->comment('Luar Inspektorat / Dalam Inspektorat');
+
+            // --- Atribut Survey ---
             $table->string('irban')->index(); 
             $table->string('jenis_layanan');
             $table->date('tanggal')->index();
+            $table->text('suggestions')->nullable();
 
-            // Skor
+            // --- Skor & Hasil Analisis ---
             $table->unsignedInteger('total_score')->default(0);
             $table->decimal('ikm_score', 5, 2)->default(0); 
             $table->string('category')->nullable()->index();
 
-            // Gunakan Index biasa saja untuk performa pencarian, bukan Unique
+            // --- Optimization Indexes ---
+            // Index komposit sangat bagus untuk performa query WHERE multi-kolom
             $table->index(['email', 'tanggal']);
+            $table->index(['irban', 'lokasi_survey']);
 
+            // --- System Columns ---
             $table->softDeletes();
             $table->timestamps();
         });

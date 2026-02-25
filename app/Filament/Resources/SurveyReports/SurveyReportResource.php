@@ -72,8 +72,8 @@ class SurveyReportResource extends Resource
     {
         return [
             'index' => ListSurveyReports::route('/'),
-            'create' => CreateSurveyReport::route('/create'),
-            'edit' => EditSurveyReport::route('/{record}/edit'),
+            // 'create' => CreateSurveyReport::route('/create'),
+            // 'edit' => EditSurveyReport::route('/{record}/edit'),
         ];
     }
    public static function canView(Model $record): bool

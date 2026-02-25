@@ -104,16 +104,18 @@ class SurveyReportsTable
                 'irban2'   => 'Irban 2',
                 'irban3'   => 'Irban 3',
                 'irbansus' => 'Irban Khusus',
+                'sekretariat' => 'Sekretariat',
             ]),
 
     // 3. Jenis Layanan
         SelectFilter::make('jenis_layanan')
             ->label('Jenis Layanan')
             ->options([
-                'Konsultasi Tata Kelola' => 'Konsultasi Tata Kelola',
-                'Pendampingan Reviu'     => 'Pendampingan Reviu',
-                'Asistensi Teknis'       => 'Asistensi Teknis',
-                'Audit Investigatif'     => 'Audit Investigatif',
+               'Audit/Reguler Investigatif' => 'Audit / Reguler Investigatif',
+               'Reviuw'                     => 'Reviuw',
+               'Evaluasi'                   => 'Evaluasi',
+               'Pemeriksaan'                => 'Pemeriksaan',
+               'Consulting'                 => 'Consulting (Sosialisasi, Bimtek, Coaching Clinic, Pendampingan, Asistensi)',
             ]),
 
     // 4. Kategori IKM

@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-24">
             <div class="flex items-center">
-                <img src="{{ asset('storage/images/logo-rembang.png') }}" 
+                <img src="{{ asset('storage/images/logo1.png') }}" 
                      alt="Logo Rembang" 
                      class="w-48 md:w-64 h-auto object-left"> 
             </div>
