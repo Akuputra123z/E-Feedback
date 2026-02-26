@@ -112,7 +112,7 @@ class SurveyReportsTable
             ->label('Jenis Layanan')
             ->options([
                'Audit/Reguler Investigatif' => 'Audit / Reguler Investigatif',
-               'Reviuw'                     => 'Reviuw',
+               'Reviu'                     => 'Reviu',
                'Evaluasi'                   => 'Evaluasi',
                'Pemeriksaan'                => 'Pemeriksaan',
                'Consulting'                 => 'Consulting (Sosialisasi, Bimtek, Coaching Clinic, Pendampingan, Asistensi)',

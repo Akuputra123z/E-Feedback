@@ -9,7 +9,8 @@
 
             <nav class="hidden md:flex items-center gap-8">
                 <a href="/" class="text-sm font-bold {{ request()->is('/') ? 'text-blue-600' : 'text-slate-600' }} hover:text-blue-600 transition-colors">Beranda</a>
-                <a href="/survey" class="text-sm font-bold {{ request()->is('survey*') ? 'text-blue-600' : 'text-slate-600' }} hover:text-blue-600 transition-colors">Survey</a>
+
+                <a href="{{ route('survey.results') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Hasil Survei</a>
                 <a href="/admin" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Portal Admin</a>
             </nav>
 

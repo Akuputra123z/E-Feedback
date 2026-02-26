@@ -33,6 +33,7 @@
         border-radius: 1rem;
     }
     
+    
 .animate-fadeInUp {
     animation: fadeInUp 0.5s ease-out forwards;
 }
@@ -48,7 +49,9 @@
             <div class="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-bold tracking-widest uppercase rounded-full border border-slate-200 mb-4">
                 Sistem Informasi Survei
             </div>
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Formulir Kepuasan Layanan</h1>
+            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Kuesioner Survei Kepuasan 
+OPD terhadap Konsultasi dan 
+Pendampingan Inspektorat</h1>
         </header>
 
         <main class="bg-white shadow-xl shadow-slate-200/50 rounded-[2rem] overflow-hidden border border-slate-100">
@@ -100,14 +103,15 @@
                 <form method="POST" action="{{ route('survey.store') }}" id="surveyForm" novalidate>
                     @csrf
 
-                   <section class="p-10 step-content">
+                   <section class="p-10 step-content" data-step="identity">
     {{-- Header Section dengan Ikon --}}
     <div class="mb-10 text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl mb-4 border border-blue-100 shadow-sm">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-        </div>
+        </div>  
+        {{-- <h4 class="section-title-label font-bold text-slate-900 uppercase tracking-wider text-sm mb-2"></h4> --}}
         <h3 class="text-2xl font-black text-slate-900 tracking-tight">Identitas Responden</h3>
         <p class="text-slate-500 text-sm mt-2">Mohon lengkapi data diri Anda untuk memulai survei</p>
     </div>
@@ -131,18 +135,27 @@
         </div>
 
         {{-- Email Resmi --}}
-        <div class="group">
-            <label class="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 group-focus-within:text-blue-600 transition-colors">
-                Email Resmi
-            </label>
-            <div class="relative">
-                <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                </span>
-                <input type="email" name="email" id="email" required placeholder="contoh: nama@instansi.go.id"
-                    class="w-full rounded-2xl pl-14 pr-6 py-5 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-50 transition-all outline-none font-semibold text-slate-700 placeholder:text-slate-400 placeholder:font-normal">
-            </div>
-        </div>
+        <div class="group mb-6">
+    <label for="email" class="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-2 transition-colors group-focus-within:text-blue-600">
+        Email Resmi
+    </label>
+    <div class="relative">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+        </span>
+        <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            placeholder="contoh: nama@instansi.go.id"
+            required
+            autocomplete="email"
+            class="w-full rounded-2xl pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-50 transition-all outline-none font-semibold text-slate-700 placeholder:text-slate-400 placeholder:font-normal"
+        >
+    </div>
+</div>
 
         {{-- Nama Instansi --}}
         <div class="group">
@@ -159,7 +172,7 @@
         </div>
     </div>
 </section>
-<section class="p-8 step-content">
+<section class="p-8 step-content template-step" data-step="2">
     {{-- Header Box ala Bagian Penilaian --}}
     <div class="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
         <div class="flex items-center gap-3 mb-3">
@@ -168,7 +181,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
             </div>
-            <h4 class="font-bold text-slate-900 uppercase tracking-wider text-sm">Bagian II : Informasi Layanan</h4>
+           <h4 class="section-title-label font-bold text-slate-900 uppercase tracking-wider text-sm"></h4>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed">
             Silakan pilih unit kerja (Irban) dan tentukan jenis layanan yang telah Anda terima.
@@ -250,7 +263,7 @@
     <select id="jenis_layanan"name="jenis_layanan"required class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition-all duration-200  focus:border-blue-600 focus:ring-4 focus:ring-blue-100 focus:outline-none  hover:border-slate-400">
         <option value="" disabled selected> Pilih Kategori Layanan...</option>
         <option value="Audit/Reguler Investigatif">Audit / Reguler Investigatif</option>
-        <option value="Review">Review</option>
+        <option value="Reviu">Reviu</option>
         <option value="Evaluasi">Evaluasi</option>
         <option value="Pemeriksaan">Pemeriksaan</option>
         <option value="Consulting">Consulting (Sosialisasi, Bimtek, Coaching Clinic, Pendampingan, Asistensi)</option>
@@ -258,20 +271,13 @@
 </div>
     </div>
 </section>
-
-                    @php
-    $dimensionLabels = [
-        'Materi' => 'Materi Konsultasi',
-        'Standar' => 'Standar Pelayanan',
-        'SDM' => 'Profesionalisme SDM',
-        'Dukungan' => 'Dukungan & Pengelolaan',
-    ];
-    // Global index untuk penomoran pertanyaan yang berkelanjutan
-    $globalIndex = 1; 
+@php
+    $sectionNumber = 3;
+    $globalIndex = 1;
 @endphp
 
-@foreach($questions->groupBy('dimension') as $dimension => $items)
-<section class="p-8 step-content dimension-section" data-dimension="{{ $dimension }}">
+@foreach($questions as $dimension => $items)
+<section class="p-8 step-content dimension-section" data-step="dimension-{{ $dimension }}" data-dimension="{{ $dimension }}">
     
     {{-- Header Box: Instruksi Penilaian --}}
     <div class="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
@@ -281,7 +287,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <h4 class="font-bold text-slate-900 uppercase tracking-wider text-sm">Bagian III : Penilaian Kepuasan</h4>
+            
+            {{-- 1. TAMBAHKAN CLASS section-title-label DI SINI --}}
+            <h4 class="section-title-label font-bold text-slate-900 uppercase tracking-wider text-sm"></h4>
+            
+            {{-- 2. TAMBAHKAN INPUT HIDDEN UNTUK MENYIMPAN NAMA DIMENSI --}}
+            <input type="hidden" class="dimension-name" value="{{ $dimensionLabels[$dimension] ?? $dimension }}">
         </div>
         <p class="text-slate-600 text-sm leading-relaxed mb-4">
             Silakan berikan penilaian Anda dengan memilih angka 1 sampai 5 berdasarkan skala berikut:
@@ -346,7 +357,7 @@
 </section>
 @endforeach
 
-                    <section class="p-8 step-content">
+           <section class="p-8 step-content" data-step="aspirasi">
     {{-- Header Box ala Bagian I, II, dan III --}}
     <div class="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
         <div class="flex items-center gap-3 mb-3">
@@ -355,7 +366,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                 </svg>
             </div>
-            <h4 class="font-bold text-slate-900 uppercase tracking-wider text-sm">Bagian Akhir : Aspirasi</h4>
+            {{-- PERBAIKAN: Tambahkan class section-title-label agar nomor otomatis muncul --}}
+            <h4 class="section-title-label font-bold text-slate-900 uppercase tracking-wider text-sm"></h4>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed">
             Masukan Anda sangat berarti bagi kami untuk terus berbenah dan memberikan pelayanan terbaik ke depannya.
@@ -396,7 +408,6 @@
         </div>
     </div>
 </section>
-
                     <footer class="px-10 py-6 bg-slate-50 border-t flex justify-between">
                         <button type="button" id="prevBtn" class="invisible text-slate-400 font-bold text-xs uppercase tracking-widest">← Kembali</button>
                         <div class="flex gap-4">
@@ -418,110 +429,91 @@ document.addEventListener('DOMContentLoaded', function() {
     const steps = Array.from(document.querySelectorAll('.step-content'));
     const lokSelect = document.getElementById('lokasiSurvey');
     const irbanSelect = document.getElementById('irbanSelect');
+    const suggestions = document.getElementById('suggestions');
+    const charCount = document.getElementById('charCount');
+    const charProgress = document.getElementById('charProgress');
     let currentStep = 0;
 
     const irbanData = {
+        irban1: {
+            title: "Irban Wilayah I",
+            fokus: "Pemerintahan & Perencanaan",
+            tugas: "Evaluasi dan reviu kepatuhan peraturan pada instansi perencanaan.",
+            lingkup: ["RKA","DPA","LKJIP","Renstra","Renja","RPJMD","LPPD","SAKIP"]
+        },
+        irban2: {
+            title: "Irban Wilayah II",
+            fokus: "Akuntabilitas & Infrastruktur",
+            tugas: "Memastikan proyek infrastruktur sesuai spek dan anggaran diawasi ketat.",
+            lingkup: ["Audit Kinerja","Dana BOS","BUMD","BLUD","PBJ","Infrastruktur"]
+        },
+        irban3: {
+            title: "Irban Wilayah III",
+            fokus: "Pemerintahan Desa",
+            tugas: "Mengaudit dana dan pengawasan penyelenggaraan pemerintah desa.",
+            lingkup: ["Dana Desa","ADD","Aset Desa","Administrasi Desa","Bumdes"]
+        },
+        irban4: {
+            title: "Irban Wilayah IV",
+            fokus: "Reformasi Birokrasi",
+            tugas: "Mengawal perubahan birokrasi, integritas, dan budaya kerja.",
+            lingkup: ["Zona Integritas","Benturan Kepentingan","Budaya Kerja","Pelayanan Publik"]
+        },
+        irbansus: {
+            title: "Irban Khusus",
+            fokus: "Investigasi & Pengaduan",
+            tugas: "Menangani tindak pidana korupsi dan pelanggaran disiplin berat.",
+            lingkup: ["Audit Investigatif","Siber Pungli","LHKPN","Whistleblowing"]
+        },
+        sekretariat: {
+            title: "Sekretariat",
+            fokus: "Administrasi & Tindak Lanjut",
+            tugas: "Mengoordinasikan pelaporan dan pemantauan tindak lanjut hasil audit.",
+            lingkup: ["TL BPK","TL BPKP","MCP KPK","LHKASN","TL Desa"]
+        }
+    };
 
-irban1: {
-
-title: "Irban Wilayah I",
-
-fokus: "Pemerintahan & Perencanaan",
-
-tugas: "Evaluasi dan reviu kepatuhan peraturan pada instansi perencanaan.",
-
-lingkup: ["RKA","DPA","LKJIP","Renstra","Renja","RPJMD","LPPD","SAKIP"]
-
-},
-
-irban2: {
-
-title: "Irban Wilayah II",
-
-fokus: "Akuntabilitas & Infrastruktur",
-
-tugas: "Memastikan proyek infrastruktur sesuai spek dan anggaran diawasi ketat.",
-
-lingkup: ["Audit Kinerja","Dana BOS","BUMD","BLUD","PBJ","Infrastruktur"]
-
-},
-
-irban3: {
-
-title: "Irban Wilayah III",
-
-fokus: "Pemerintahan Desa",
-
-tugas: "Mengaudit dana dan pengawasan penyelenggaraan pemerintah desa.",
-
-lingkup: ["Dana Desa","ADD","Aset Desa","Administrasi Desa","Bumdes"]
-
-},
-
-irban4: {
-
-title: "Irban Wilayah IV",
-
-fokus: "Reformasi Birokrasi",
-
-tugas: "Mengawal perubahan birokrasi, integritas, dan budaya kerja.",
-
-lingkup: ["Zona Integritas","Benturan Kepentingan","Budaya Kerja","Pelayanan Publik"]
-
-},
-
-irbansus: {
-
-title: "Irban Khusus",
-
-fokus: "Investigasi & Pengaduan",
-
-tugas: "Menangani tindak pidana korupsi dan pelanggaran disiplin berat.",
-
-lingkup: ["Audit Investigatif","Siber Pungli","LHKPN","Whistleblowing"]
-
-},
-
-sekretariat: {
-
-title: "Sekretariat",
-
-fokus: "Administrasi & Tindak Lanjut",
-
-tugas: "Mengoordinasikan pelaporan dan pemantauan tindak lanjut hasil audit.",
-
-lingkup: ["TL BPK","TL BPKP","MCP KPK","LHKASN","TL Desa"]
-
-}
-
-};
+    // --- LOGIKA UTAMA ---
 
     function getActiveSteps() {
         return steps.filter(step => {
-            if (lokSelect.value === 'Luar Inspektorat' && step.dataset.dimension === 'Dukungan') {
-                return false;
-            }
+            if (lokSelect.value === 'Luar Inspektorat' && step.dataset.dimension === 'Dukungan') return false;
             return true;
         });
     }
 
     function updateUI() {
         const activeSteps = getActiveSteps();
-        
-        // Sembunyikan SEMUA step terlebih dahulu (PENTING)
+        const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+
         steps.forEach(s => {
             s.style.display = 'none';
             s.classList.remove('active');
         });
 
-        // Tampilkan hanya yang aktif
         if (currentStep >= activeSteps.length) currentStep = activeSteps.length - 1;
         const currentEl = activeSteps[currentStep];
-        
         currentEl.style.display = 'block';
         setTimeout(() => currentEl.classList.add('active'), 10);
 
-        // Progress
+        // Update Label Bagian
+        activeSteps.forEach((step, index) => {
+            const label = step.querySelector('.section-title-label');
+            if (label) {
+                const dimensionNameInput = step.querySelector('.dimension-name');
+                if (dimensionNameInput) {
+                    label.textContent = `Bagian ${roman[index]} : ${dimensionNameInput.value}`;
+                } else if (step.dataset.step === 'aspirasi') {
+                    label.textContent = `Bagian ${roman[index]} : Aspirasi`;
+                } else if (step.dataset.step === 'identity') {
+                    label.textContent = `Bagian ${roman[index]} : Identitas Responden`;
+                } else if (step.classList.contains('template-step')) {
+                    label.textContent = `Bagian ${roman[index]} : Informasi Layanan`;
+                }
+            }
+        });
+
+        // Update Progress
         const progress = ((currentStep + 1) / activeSteps.length) * 100;
         document.getElementById('progressBar').style.width = `${progress}%`;
         document.getElementById('stepBadge').textContent = `Langkah ${currentStep + 1} dari ${activeSteps.length}`;
@@ -538,17 +530,7 @@ lingkup: ["TL BPK","TL BPKP","MCP KPK","LHKASN","TL Desa"]
         }
     }
 
-    lokSelect.addEventListener('change', () => {
-        // Reset validasi saat lokasi berubah
-        const isLuar = lokSelect.value === 'Luar Inspektorat';
-        document.querySelectorAll('.dimension-section').forEach(sec => {
-            if (sec.dataset.dimension === 'Dukungan') {
-                sec.querySelectorAll('input').forEach(r => r.required = !isLuar);
-            }
-        });
-        currentStep = 0; 
-        updateUI();
-    });
+    // --- VALIDASI ---
 
     function validateStep() {
         const activeSteps = getActiveSteps();
@@ -556,27 +538,67 @@ lingkup: ["TL BPK","TL BPKP","MCP KPK","LHKASN","TL Desa"]
         let valid = true;
 
         currentEl.querySelectorAll('[required]:not([type="radio"])').forEach(i => {
-            if (!i.value.trim()) { i.classList.add('border-red-500'); valid = false; }
-            else i.classList.remove('border-red-500');
+            const isEmail = i.type === 'email';
+            const emailPattern = /^[a-z0-9][a-z0-9._-]*@[a-z0-9.-]+\.[a-z]{2,4}$/i;
+            let isFieldValid = true;
+
+            if (isEmail) {
+                if (!i.value.trim() || !emailPattern.test(i.value)) isFieldValid = false;
+            } else {
+                if (!i.value.trim()) isFieldValid = false;
+            }
+
+            if (!isFieldValid) {
+                i.classList.add('border-red-500', 'ring-2', 'ring-red-100');
+                valid = false;
+            }
         });
 
         currentEl.querySelectorAll('.question-block').forEach(block => {
             if (!block.querySelector('input:checked')) {
                 block.classList.add('error-highlight');
                 valid = false;
-            } else block.classList.remove('error-highlight');
+            }
         });
 
         return valid;
     }
 
+    // --- EVENT LISTENERS ---
+
+    // Auto-clear error highlights
+    form.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('border-red-500', 'ring-2', 'ring-red-100');
+            this.closest('.question-block')?.classList.remove('error-highlight');
+        });
+    });
+
+    // Character Counter
+    if(suggestions) {
+        suggestions.addEventListener('input', () => {
+            const length = suggestions.value.length;
+            charCount.textContent = length;
+            charProgress.style.width = (length / 1000 * 100) + '%';
+        });
+    }
+
     document.getElementById('nextBtn').addEventListener('click', () => {
-        if (validateStep()) { currentStep++; updateUI(); window.scrollTo(0,0); }
-        else Swal.fire('Perhatian', 'Mohon lengkapi isian.', 'warning');
+        if (!validateStep()) {
+            Swal.fire('Perhatian', 'Mohon lengkapi semua isian yang wajib diisi dengan benar.', 'warning');
+        } else {
+            currentStep++;
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     });
 
     document.getElementById('prevBtn').addEventListener('click', () => {
-        if (currentStep > 0) { currentStep--; updateUI(); }
+        if (currentStep > 0) {
+            currentStep--;
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     });
 
     irbanSelect.addEventListener('change', () => {
@@ -585,9 +607,24 @@ lingkup: ["TL BPK","TL BPKP","MCP KPK","LHKASN","TL Desa"]
             document.getElementById('infoTitle').textContent = data.title;
             document.getElementById('infoFokus').textContent = data.fokus;
             document.getElementById('infoTugas').textContent = data.tugas;
-            document.getElementById('infoLingkup').innerHTML = data.lingkup.map(l => `<span class="px-2 py-1 bg-white border border-blue-200 rounded-lg text-[10px] font-bold text-blue-700">${l}</span>`).join('');
+            document.getElementById('infoLingkup').innerHTML = data.lingkup
+                .map(l => `<span class="px-2 py-1 bg-white border border-blue-200 rounded-lg text-[10px] font-bold text-blue-700">${l}</span>`)
+                .join('');
             document.getElementById('irbanInfoBox').classList.remove('hidden');
-        } else document.getElementById('irbanInfoBox').classList.add('hidden');
+        } else {
+            document.getElementById('irbanInfoBox').classList.add('hidden');
+        }
+    });
+
+    // Proteksi Double Submit
+    form.addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <svg class="animate-spin h-5 w-5 text-white inline mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg> Mengirim...`;
     });
 
     updateUI();

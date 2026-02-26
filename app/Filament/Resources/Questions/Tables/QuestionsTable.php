@@ -5,24 +5,28 @@ namespace App\Filament\Resources\Questions\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Grouping\Group;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Tables\Grouping\Group;
+use App\Models\Question;
+use Filament\Tables\Actions\EditAction;
+// use Filament\Tables\Actions\DeleteAction;
 use Filament\Actions\DeleteAction;
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Illuminate\Database\Eloquent\Builder;
 
 class QuestionsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-            ->defaultSort('sort_order')
+        
             ->groups([
                 static::dimensionGroup(),
             ])
-            ->defaultGroup('dimension') // otomatis grouping aktif
+            ->defaultGroup('dimension')
             ->persistFiltersInSession()
             ->columns([
                 static::sortOrderColumn(),
@@ -34,35 +38,56 @@ class QuestionsTable
                 static::dimensionFilter(),
                 static::statusFilter(),
             ])
-            ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+            ->actions([
+                DeleteAction::make()
+                ->successNotification(
+                Notification::make()
+                        ->success()
+                        ->title('Question deleted')
+                        ->body('The question has been deleted successfully.'),
+    )
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->bulkActions([
+               
+            ])
+            ->striped()
+            ->emptyStateHeading('Belum ada pertanyaan');
     }
 
     protected static function dimensionGroup(): Group
-    {
-        return Group::make('dimension')
-            ->label('Dimensi')
-            ->collapsible() // bisa collapse per group
-            ->getTitleFromRecordUsing(fn ($record) => static::dimensionLabel($record->dimension))
-            ->orderQueryUsing(fn ($query, $direction) =>
-                $query->orderBy('dimension', $direction)
-            );
-    }
+{
+    return Group::make('dimension')
+        ->label('Dimensi')
+        ->collapsible()
+        // KUNCI PERBAIKAN:
+        // Kita urutkan Group berdasarkan urutan terkecil sort_order di dalamnya
+        // dan pastikan query utama selalu mengikuti urutan ini.
+        ->orderQueryUsing(fn (Builder $query) => $query
+            ->orderBy('dimension', 'asc') // Menjaga agar string yang sama tetap berkumpul
+            ->orderBy('sort_order', 'asc') // Menjaga urutan angka di dalam grup
+        )
+        ->getTitleFromRecordUsing(fn ($record) => static::dimensionLabel($record->dimension));
+}
 
+   
     protected static function sortOrderColumn(): TextColumn
     {
         return TextColumn::make('sort_order')
             ->label('No')
             ->numeric()
-            ->sortable()
-            ->alignCenter();
+            ->alignCenter()
+            ->getStateUsing(function ($record, TextColumn $column) {
+                // Ambil semua record yang tampil di table
+                $records = $column->getTable()->getRecords();
+
+                // Filter record yang memiliki dimensi sama
+                $sameDimension = $records->filter(fn($r) => $r->dimension === $record->dimension)->values();
+
+                // Cari index record ini
+                $index = $sameDimension->search(fn($r) => $r->id === $record->id);
+
+                return $index !== false ? $index + 1 : $record->sort_order;
+            });
     }
 
     protected static function textColumn(): TextColumn
@@ -70,7 +95,10 @@ class QuestionsTable
         return TextColumn::make('text')
             ->label('Pertanyaan')
             ->wrap()
-            ->searchable();
+            ->limit(100)
+            ->tooltip(fn (TextColumn $column): ?string => $column->getState())
+            ->searchable()
+            ->sortable();
     }
 
     protected static function dimensionColumn(): TextColumn
@@ -78,7 +106,13 @@ class QuestionsTable
         return TextColumn::make('dimension')
             ->label('Dimensi')
             ->badge()
-            ->color(fn (string $state) => static::dimensionColor($state))
+            ->color(fn (string $state): string => match ($state) {
+                'Materi'   => 'info',
+                'Standar'  => 'warning',
+                'SDM'      => 'success',
+                'Dukungan' => 'danger',
+                default    => 'gray',
+            })
             ->sortable();
     }
 
@@ -87,8 +121,6 @@ class QuestionsTable
         return IconColumn::make('is_active')
             ->label('Status')
             ->boolean()
-            ->trueIcon('heroicon-o-check-circle')
-            ->falseIcon('heroicon-o-x-circle')
             ->sortable();
     }
 
@@ -97,7 +129,7 @@ class QuestionsTable
         return SelectFilter::make('dimension')
             ->label('Filter Dimensi')
             ->options(static::dimensionOptions())
-            ->native(false);
+            ->searchable();
     }
 
     protected static function statusFilter(): TernaryFilter
@@ -105,8 +137,9 @@ class QuestionsTable
         return TernaryFilter::make('is_active')
             ->label('Status Aktif')
             ->placeholder('Semua Status')
-            ->trueLabel('Hanya Aktif')
-            ->falseLabel('Hanya Non-Aktif');
+            ->trueLabel('Aktif')
+            ->falseLabel('Non-Aktif')
+            ->native(false);
     }
 
     protected static function dimensionOptions(): array
@@ -122,16 +155,5 @@ class QuestionsTable
     protected static function dimensionLabel(string $value): string
     {
         return static::dimensionOptions()[$value] ?? $value;
-    }
-
-    protected static function dimensionColor(string $state): string
-    {
-        return match ($state) {
-            'Materi'   => 'info',
-            'Standar'  => 'warning',
-            'SDM'      => 'success',
-            'Dukungan' => 'danger',
-            default    => 'gray',
-        };
     }
 }

@@ -49,7 +49,8 @@
 
             <nav class="hidden md:flex items-center gap-8">
                 <a href="/" class="text-sm font-bold text-blue-600 hover:text-blue-600 transition-colors">Beranda</a>
-                <a href="/survey" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Survey</a>
+                {{-- <a href="/survey" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Survey</a> --}}
+                  <a href="{{ route('survey.results') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Hasil Survei</a>
                 <a href="/admin" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Portal Admin</a>
             </nav>
 
@@ -81,10 +82,20 @@
     <main>
         <section class="relative min-h-[90vh] flex items-center justify-center hero-gradient px-6 overflow-hidden">
     <div class="max-w-4xl w-full text-center space-y-10">
+
+        <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-slate-200 shadow-sm mb-8">
+         
+            <span class="text-2xl font-bold text-slate-700">SIPUAS ITDA </span>
+        </div>
+         {{-- <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+            SIPUAS IPTDA<br>
+            
+        </h1> --}}
+
         <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
-            Wujudkan Pemerintahan <br>
+            SUARA ANDA<br>
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
-                Bersih & Akuntabel
+                INTEGRITAS KAMI
             </span>
         </h1>
         <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">

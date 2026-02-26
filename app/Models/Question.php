@@ -20,6 +20,13 @@ class Question extends Model
         'sort_order' => 'integer',
     ];
 
+    protected static function booted()
+{
+    static::saving(function ($question) {
+        $question->dimension = trim($question->dimension);
+    });
+}
+
     /**
      * Relasi ke detail jawaban.
      */

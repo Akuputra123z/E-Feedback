@@ -5,9 +5,10 @@ namespace App\Filament\Resources\Questions\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Section; // Perbaikan namespace: biasanya di bawah Forms
 use Filament\Schemas\Schema;
 use Illuminate\Validation\Rules\Unique;
+use Illuminate\Validation\Rule; // Tambahkan ini
 
 class QuestionForm
 {
@@ -49,7 +50,7 @@ class QuestionForm
             ->searchable()
             ->preload()
             ->native(false)
-            ->reactive(); // refresh validation saat berubah
+            ->reactive(); 
     }
 
     protected static function sortOrderField(): TextInput
@@ -61,7 +62,8 @@ class QuestionForm
             ->required()
             ->minValue(1)
             ->maxValue(999)
-            ->rule(fn (callable $get) => static::uniqueSortOrderRule($get))
+            // Menggunakan closure untuk menangani update secara dinamis
+            ->rule(fn (callable $get, $record) => static::uniqueSortOrderRule($get, $record))
             ->validationMessages([
                 'unique' => 'Nomor urut ini sudah digunakan dalam kategori dimensi yang dipilih.',
             ]);
@@ -77,11 +79,18 @@ class QuestionForm
             ->required();
     }
 
-    protected static function uniqueSortOrderRule(callable $get): Unique
+    protected static function uniqueSortOrderRule(callable $get, $record): Unique
     {
-        return (new Unique(self::TABLE, 'sort_order'))
-            ->where('dimension', $get('dimension'))
-            ->ignore(request()->route('record'));
+        // Menggunakan Rule::unique agar lebih stabil dalam menangani database
+        $rule = Rule::unique(self::TABLE, 'sort_order')
+            ->where('dimension', $get('dimension'));
+
+        // Jika sedang mode edit ($record tidak null), abaikan ID record saat ini
+        if ($record) {
+            $rule->ignore($record->id);
+        }
+
+        return $rule;
     }
 
     protected static function dimensionOptions(): array
