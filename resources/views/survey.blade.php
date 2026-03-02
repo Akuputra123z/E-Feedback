@@ -119,17 +119,25 @@ Pendampingan Inspektorat</h1>
     <div class="space-y-8">
         {{-- Lokasi Survei - Menggunakan Background Subtle --}}
         <div class="group">
-            <label class="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 group-focus-within:text-blue-600 transition-colors">
+            <label class="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 group-focus-within:text-blue-600 transition-colors ml-1">
                 Lokasi Survei
             </label>
+            
             <div class="relative">
                 <select name="lokasi_survey" id="lokasiSurvey" required 
-                    class="w-full appearance-none rounded-2xl px-6 py-5 bg-slate-50 border-2 border-slate-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-50 transition-all outline-none font-semibold text-slate-700">
-                    <option value="Dalam Inspektorat">Dalam Inspektorat</option>
-                    <option value="Luar Inspektorat">Luar Inspektorat</option>
+                    class="w-full appearance-none !bg-none rounded-2xl px-6 py-5 bg-slate-50 border-2 border-slate-100 
+                           focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-50 
+                           transition-all outline-none font-semibold text-slate-700 cursor-pointer">
+                    <option value="" disabled selected hidden>Pilih Lokasi</option>
+                    <option value="Dalam Inspektorat" class="font-sans">Dalam Inspektorat</option>
+                    <option value="Luar Inspektorat" class="font-sans">Luar Inspektorat</option>
                 </select>
-                <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+        
+                <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 
+                            group-focus-within:text-blue-600 group-focus-within:rotate-180 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                    </svg>
                 </div>
             </div>
         </div>
