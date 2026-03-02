@@ -164,7 +164,7 @@
          COVER PAGE
     ========================== -->
     <div class="cover page-break">
-        <img src="{{ public_path('storage/images/logo.webp') }}" width="80">
+        <img src="{{ public_path('img/logo.webp') }}" width="80">
 
         <p class="text-muted" style="margin-top:15px; letter-spacing:2px;">
             PEMERINTAH KABUPATEN REMBANG
