@@ -27,8 +27,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->registration()
-            ->brandLogo(asset('storage/images/logo-rembang.png'))
+            // ->registration()
+            ->brandLogo(fn () => asset('img/logo-rembang.png'))
             ->brandLogoHeight('4rem')
             ->path('admin')
             ->login()
