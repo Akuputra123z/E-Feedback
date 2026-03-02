@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
             <div class="lg:col-span-5 space-y-6">
                 <div class="flex items-center">
-                    <img src="{{ asset('storage/images/logo1.png') }}" 
+                    <img src="{{ asset('img/logo-rembang.png') }}" 
                          alt="Logo Rembang" 
                          class="w-64 md:w-80 h-auto object-contain"> 
                     </div>

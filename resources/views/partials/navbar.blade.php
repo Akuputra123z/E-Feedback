@@ -2,15 +2,16 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-24">
             <div class="flex items-center">
-                <img src="{{ asset('storage/images/logo1.png') }}" 
+                <img src="{{ asset('img/logo-rembang.png') }}" 
+                
                      alt="Logo Rembang" 
                      class="w-48 md:w-64 h-auto object-left"> 
             </div>
 
             <nav class="hidden md:flex items-center gap-8">
                 <a href="/" class="text-sm font-bold {{ request()->is('/') ? 'text-blue-600' : 'text-slate-600' }} hover:text-blue-600 transition-colors">Beranda</a>
-
-                <a href="{{ route('survey.results') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Hasil Survei</a>
+                <a href="/survey" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Survey</a>
+                {{-- <a href="{{ route('survey.results') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Hasil Survei</a> --}}
                 <a href="/admin" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Portal Admin</a>
             </nav>
 

@@ -51,8 +51,8 @@
 
             <nav class="hidden md:flex items-center gap-8">
                 <a href="/" class="text-sm font-bold text-blue-600 hover:text-blue-600 transition-colors">Beranda</a>
-                {{-- <a href="/survey" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Survey</a> --}}
-                  <a href="{{ route('survey.results') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Hasil Survei</a>
+                <a href="/survey" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Survey</a>
+                  {{-- <a href="{{ route('survey.results') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Hasil Survei</a> --}}
                 <a href="/admin" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Portal Admin</a>
             </nav>
 
@@ -71,7 +71,7 @@
 
     <div id="mobile-menu" class="hidden bg-white border-b border-slate-200 px-4 py-6 space-y-4 shadow-xl">
         <a href="/" class="block text-base font-bold text-blue-600 hover:text-blue-600">Beranda</a>
-        <a href="/survey" class="block text-base font-bold text-slate-600 hover:text-blue-600">Survey</a>
+        {{-- <a href="/survey" class="block text-base font-bold text-slate-600 hover:text-blue-600">Survey</a> --}}
         <a href="/admin" class="block text-base font-bold text-slate-600 hover:text-blue-600">Portal Admin</a>
         <hr class="border-slate-100">
         <a href="/survey" class="block w-full text-center bg-blue-600 text-white py-3 rounded-xl font-bold shadow-md">
