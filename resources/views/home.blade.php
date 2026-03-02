@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="{{ asset('img/logo.webp') }}" type="image/x-icon"/>
+
     <title>Beranda - Inspektorat Kabupaten Rembang</title>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -42,7 +44,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-24">
             <div class="flex items-center">
-                <img src="https://euadit.kadinrembang.com/storage/images/logo1.png" 
+                <img src="{{ asset('img/logo-rembang.png') }}"
                      alt="Logo Rembang" 
                      class="w-48 md:w-64 h-auto object-left"> 
             </div>
@@ -115,7 +117,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
             <div class="lg:col-span-5 space-y-6">
                 <div class="flex items-center">
-                    <img src="https://euadit.kadinrembang.com/storage/images/logo1.png" 
+                    <img src="{{ asset('img/logo-rembang.png') }}"
                          alt="Logo Rembang" 
                          class="w-64 md:w-80 h-auto object-contain"> 
                     </div>
