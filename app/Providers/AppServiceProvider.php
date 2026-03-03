@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\SurveyResponse;
 use App\Observers\SurveyResponseObserver;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         SurveyResponse::observe(SurveyResponseObserver::class);
+
+
+        // if (app()->environment('production')) {
+        //     URL::forceScheme('https');
+        // }
     }
 }

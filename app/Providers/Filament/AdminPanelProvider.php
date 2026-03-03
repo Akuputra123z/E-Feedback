@@ -27,7 +27,9 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            
             // ->registration()
+            ->favicon(fn () => asset('img/logo.webp'))
             ->brandLogo(fn () => asset('img/logo-rembang.png'))
             ->brandLogoHeight('4rem')
             ->path('admin')
